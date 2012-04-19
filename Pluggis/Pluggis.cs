@@ -103,22 +103,19 @@ namespace Pluggis
             int length = e.Data.MessageArray.Length;
             switch (e.Data.MessageArray[0])
             {
-                case "+hi":
-                    Message(e.Data.Channel, e.Data.Nick + ": " + "Hi to you aswell!"); 
+                case "+version":
+                    Message(e.Data.Channel, "Pluggis C# IRC-BOT available @ http://github.com/rojters/Pluggis"); 
                     break;
                 case "+time":
-                    Message(e.Data.Channel, e.Data.Nick + ": " + System.DateTime.Now.ToString());
+                    Message(e.Data.Channel, System.DateTime.Now.ToString());
                     break;
-                case "+channel":
-                    Message(e.Data.Channel, e.Data.Nick + ": " + channel.Name + " " + channel.Topic);
-                    break;
-                case "+rage":
-                    Ragefaces rage = new Ragefaces(e.Data.MessageArray[1]);
-                    Message(e.Data.Channel, rage.rageInfo);
+                case "+machine":
+                    Message(e.Data.Channel, Environment.OSVersion + " " + Environment.ProcessorCount + " CPU(s)");
                     break;
                 default:
                     ParseForURL parse = new ParseForURL(e.Data.MessageArray);
-                    if (!parse.outMessage.Equals(""))
+                    string outMessage = parse.outMessage;
+                    if (outMessage != null && !outMessage.Equals(""))
                     {
                         Message(e.Data.Channel, parse.outMessage);
                     }

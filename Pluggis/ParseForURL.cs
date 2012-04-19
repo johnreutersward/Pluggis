@@ -22,20 +22,36 @@ namespace Pluggis
             foreach (string entry in messageLine)
             {
                 string entryLower = entry.ToLower();
+
+                //If you post links without http:// then you hate the internet
                 if (entryLower.StartsWith("http://") || entryLower.StartsWith("www."))
                 {
                     url = entry;
                 }
             }
 
-            if (!url.Equals(""))
+            if (url != null && !url.Equals(""))
             {
-                if (url.Contains("ragefac.es/"))
+                if (url.Contains("ragefac.es/") && url.Length > 18)
                 {
-                    Ragefaces rage = new Ragefaces(url.Substring(url.LastIndexOf("/"), url.Length+1));
+                    url = CheckLastSlash(url);
+                    int lastIndex = url.LastIndexOf(".es/") + 4;
+                    string id = url.Substring(lastIndex, url.Length - lastIndex);
+                    Console.WriteLine(id);
+                    Ragefaces rage = new Ragefaces(id);
                     outMessage = rage.rageInfo;
                 }
             }
+
+        }
+
+        public string CheckLastSlash(string url)
+        {
+            if (url.EndsWith("/"))
+            {
+                return url.Substring(0, url.Length - 1);
+            }
+            return url;
         }
 
  

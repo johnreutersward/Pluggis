@@ -23,7 +23,7 @@ namespace Pluggis
             string rageSonNoCache = rageSON.Substring(0, rageSON.LastIndexOf("}") + 1);
 
             Rageface rage = JsonConvert.DeserializeObject<Rageface>(rageSonNoCache);
-            rageInfo = "Ragecomic: " + rage.items[0].face_tags + " Cat. (" + rage.items[0].face_category + ") Times viewed: " + rage.items[0].face_views; 
+            rageInfo = "Rageface tagged as " + rage.items[0].face_tags + " in category " + rage.items[0].face_category + " (" + rage.items[0].face_views + " views)"; 
         }
 
         public class Rageface
