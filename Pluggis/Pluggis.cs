@@ -18,6 +18,7 @@ namespace Pluggis
         private int port;
         private string channel;
         public bool isConnected;
+        private Random rand;
 
         private IrcClient irc;
         private OutputConsole oc;
@@ -33,6 +34,7 @@ namespace Pluggis
             this.channel = channel;
             irc = new IrcClient();
             oc = new OutputConsole();
+            rand = new Random();
             isConnected = false;
         }
 
@@ -112,6 +114,9 @@ namespace Pluggis
                 case "+machine":
                     Message(e.Data.Channel, Environment.OSVersion + " " + Environment.ProcessorCount + " CPU(s)");
                     break;
+                case "+diceroll":
+                    Message(e.Data.Channel, "Alea iacta est: " + rand.Next(1,7));
+                    break;
                 default:
                     ParseForURL parse = new ParseForURL(e.Data.MessageArray);
                     string outMessage = parse.outMessage;
@@ -125,11 +130,11 @@ namespace Pluggis
 
         static void Main(string[] args)
         {
-            Pluggis pluggis = new Pluggis("Roybot", "pluggis", "pluggis-bot", "xs4all.nl.quakenet.org", 6667, "#pluggisbot");
+            Pluggis pluggis = new Pluggis("Roybot", "pluggis", "pluggis-bot", "lindbohm.freenode.net", 6667, "#iluvlinux");
             pluggis.Init();
             pluggis.Connect();
             pluggis.Login();
-            pluggis.Join("#pluggisbot");
+            pluggis.Join("#iluvlinux");
             pluggis.Listen();
             Console.ReadLine();
         }
