@@ -115,7 +115,21 @@ namespace Pluggis
                     Message(e.Data.Channel, Environment.OSVersion + " " + Environment.ProcessorCount + " CPU(s)");
                     break;
                 case "+diceroll":
-                    Message(e.Data.Channel, "Alea iacta est: " + rand.Next(1,7));
+                    int maxDice = 7;
+                    if (length > 1)
+                    {
+                        String _max = e.Data.MessageArray[1];
+                        int _maxDice;
+                        bool parseSuccess = Int32.TryParse(_max, out _maxDice);
+                        if (parseSuccess)
+                        {
+                            if (_maxDice >= 1)
+                            {
+                                maxDice = _maxDice;
+                            }
+                        }
+                    }
+                    Message(e.Data.Channel, "Alea iacta est: " + rand.Next(1,maxDice));
                     break;
                 default:
                     ParseForURL parse = new ParseForURL(e.Data.MessageArray);
