@@ -125,7 +125,7 @@ namespace Pluggis
                         {
                             if (_maxDice >= 1)
                             {
-                                maxDice = _maxDice;
+                                maxDice = _maxDice + 1;
                             }
                         }
                     }
