@@ -60,7 +60,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=a5715cc6d5c3540b, processorArchitecture=MSIL">
@@ -90,6 +90,7 @@
     <Compile Include="Plugins\ActionHandler.cs" />
     <Compile Include="Plugins\DiceRoll.cs" />
     <Compile Include="Plugins\Ragefaces.cs" />
+    <Compile Include="Plugins\ShortenURL.cs" />
     <Compile Include="Plugins\SysInfo.cs" />
     <Compile Include="Plugins\Time.cs" />
     <Compile Include="Utils.cs" />
