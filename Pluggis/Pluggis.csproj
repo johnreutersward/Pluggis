@@ -87,7 +87,13 @@
     <Compile Include="OutputConsole.cs" />
     <Compile Include="ParseForURL.cs" />
     <Compile Include="Pluggis.cs" />
-    <Compile Include="Plugins\Ragefaces\Ragefaces.cs" />
+    <Compile Include="Plugins\ActionHandler.cs" />
+    <Compile Include="Plugins\DiceRoll.cs" />
+    <Compile Include="Plugins\Ragefaces.cs" />
+    <Compile Include="Plugins\SysInfo.cs" />
+    <Compile Include="Plugins\Time.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Plugins\VersionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

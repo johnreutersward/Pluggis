@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Pluggis
 {
-    class OutputConsole
+    static class OutputConsole
     {
 
         public enum LogType
@@ -15,14 +15,14 @@ namespace Pluggis
             System = 3
         }
 
-        public void Print(LogType type, string msg)
+        public static void Print(LogType type, string msg)
         {
             string outLine = type + " " + msg;
             Console.WriteLine(outLine);
             Log(outLine);
         }
 
-        public void Log(string msg)
+        public static void Log(string msg)
         {
         }
 

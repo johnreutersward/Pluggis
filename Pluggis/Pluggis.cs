@@ -7,6 +7,8 @@ using System.Collections;
 
 using Meebey.SmartIrc4net;
 
+using Pluggis.Plugins;
+
 namespace Pluggis
 {
     class Pluggis
@@ -18,10 +20,8 @@ namespace Pluggis
         private int port;
         private string channel;
         public bool isConnected;
-        private Random rand;
 
         private IrcClient irc;
-        private OutputConsole oc;
 
 
         public Pluggis(string adminName, string nick, string user, string server, int port, string channel)
@@ -33,8 +33,6 @@ namespace Pluggis
             this.port = port;
             this.channel = channel;
             irc = new IrcClient();
-            oc = new OutputConsole();
-            rand = new Random();
             isConnected = false;
         }
 
@@ -52,7 +50,7 @@ namespace Pluggis
         public void Disconnect()
         {
             irc.Disconnect();
-            oc.Print(OutputConsole.LogType.System, "Exiting...");
+            OutputConsole.Print(OutputConsole.LogType.System, "Exiting...");
         }
 
         public void Connect()
@@ -64,7 +62,7 @@ namespace Pluggis
             }
             catch (ConnectionException e)
             {
-                oc.Print(OutputConsole.LogType.System,"Could not connect to " + server);
+                OutputConsole.Print(OutputConsole.LogType.System, "Could not connect to " + server);
             }
         }
 
@@ -86,71 +84,43 @@ namespace Pluggis
         public void Message(string destination, string message)
         {
             irc.SendMessage(SendType.Message, destination, message);
-            oc.Print(OutputConsole.LogType.Out, destination + " " + message);
+            OutputConsole.Print(OutputConsole.LogType.Out, destination + " " + message);
         }
 
         public void OnError(object sender, ErrorEventArgs e)
         {
-            oc.Print(OutputConsole.LogType.System, "Error: " + e.ErrorMessage);
+            OutputConsole.Print(OutputConsole.LogType.System, "Error: " + e.ErrorMessage);
         }
 
         public void OnRawMessage(object sender, IrcEventArgs e)
         {
-            oc.Print(OutputConsole.LogType.In, e.Data.RawMessage);
+            OutputConsole.Print(OutputConsole.LogType.In, e.Data.RawMessage);
         }
 
         public void OnChannelMessage(object sender, IrcEventArgs e)
         {
             Channel channel = irc.GetChannel(e.Data.Channel);
-            int length = e.Data.MessageArray.Length;
+            string[] messageLine = e.Data.MessageArray;
             switch (e.Data.MessageArray[0])
             {
-                case "+version":
-                    Message(e.Data.Channel, "Pluggis C# IRC-BOT available @ http://github.com/rojters/Pluggis"); 
-                    break;
-                case "+time":
-                    Message(e.Data.Channel, System.DateTime.Now.ToString());
-                    break;
-                case "+machine":
-                    Message(e.Data.Channel, Environment.OSVersion + " " + Environment.ProcessorCount + " CPU(s)");
-                    break;
-                case "+diceroll":
-                    int maxDice = 7;
-                    if (length > 1)
-                    {
-                        String _max = e.Data.MessageArray[1];
-                        int _maxDice;
-                        bool parseSuccess = Int32.TryParse(_max, out _maxDice);
-                        if (parseSuccess)
-                        {
-                            if (_maxDice >= 1)
-                            {
-                                maxDice = _maxDice + 1;
-                            }
-                        }
-                    }
-                    Message(e.Data.Channel, "Alea iacta est: " + rand.Next(1,maxDice));
-                    break;
-                default:
-                    ParseForURL parse = new ParseForURL(e.Data.MessageArray);
-                    string outMessage = parse.outMessage;
-                    if (outMessage != null && !outMessage.Equals(""))
-                    {
-                        Message(e.Data.Channel, parse.outMessage);
-                    }
-                    break;
+                case "+diceroll":   new DiceRoll(this, messageLine, channel);           break;
+                case "+version":    new VersionInfo(this, channel);                     break;
+                case "+time":       new Time(this, channel);                            break;
+                case "+sysinfo":    new SysInfo(this, channel);                         break;
+                default:            new ParseForURL(this, messageLine, channel);        break;
             }
         }
 
         static void Main(string[] args)
         {
-            Pluggis pluggis = new Pluggis("Roybot", "pluggis", "pluggis-bot", "lindbohm.freenode.net", 6667, "#iluvlinux");
+            Pluggis pluggis = new Pluggis("Roybot", "pluggis", "pluggis-bot", "lindbohm.freenode.net", 6667, "#pluggis");
             pluggis.Init();
             pluggis.Connect();
             pluggis.Login();
-            pluggis.Join("#iluvlinux");
+            pluggis.Join("#pluggis");
             pluggis.Listen();
             Console.ReadLine();
+            
         }
 
 
