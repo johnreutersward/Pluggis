@@ -13,30 +13,43 @@ namespace Pluggis
 {
     class Pluggis
     {
-        private string adminName;
+        private string admin;
         private string nick;
         private string user;
         private string server;
         private int port;
-        private string channel;
+        private List<string> channels;
         public bool isConnected;
 
         private IrcClient irc;
 
 
-        public Pluggis(string adminName, string nick, string user, string server, int port, string channel)
+        public Pluggis(string admin, string nick, string user, string server, int port, List<string> channels)
         {
-            this.adminName = adminName;
+            this.admin = admin;
             this.nick = nick;
             this.user = user;
             this.server = server;
             this.port = port;
-            this.channel = channel;
+            this.channels = channels;
             irc = new IrcClient();
             isConnected = false;
+            Run();
         }
 
-        public void Init()
+        private void Run()
+        {
+            Init();
+            Connect();
+            Login();
+            foreach (String channel in channels)
+            {
+                Join(channel);
+            }
+            Listen();
+        }
+
+        private void Init()
         {
             Thread.CurrentThread.Name = "Main";
             irc.Encoding = System.Text.Encoding.UTF8;
@@ -53,7 +66,7 @@ namespace Pluggis
             OutputConsole.Print(OutputConsole.LogType.System, "Exiting...");
         }
 
-        public void Connect()
+        private void Connect()
         {
             try
             {
@@ -66,12 +79,12 @@ namespace Pluggis
             }
         }
 
-        public void Listen()
+        private void Listen()
         {
             irc.Listen();
         }
 
-        public void Login()
+        private void Login()
         {
             irc.Login(nick, user);
         }
@@ -87,17 +100,17 @@ namespace Pluggis
             OutputConsole.Print(OutputConsole.LogType.Out, destination + " " + message);
         }
 
-        public void OnError(object sender, ErrorEventArgs e)
+        private void OnError(object sender, ErrorEventArgs e)
         {
             OutputConsole.Print(OutputConsole.LogType.System, "Error: " + e.ErrorMessage);
         }
 
-        public void OnRawMessage(object sender, IrcEventArgs e)
+        private void OnRawMessage(object sender, IrcEventArgs e)
         {
             OutputConsole.Print(OutputConsole.LogType.In, e.Data.RawMessage);
         }
 
-        public void OnChannelMessage(object sender, IrcEventArgs e)
+        private void OnChannelMessage(object sender, IrcEventArgs e)
         {
             Channel channel = irc.GetChannel(e.Data.Channel);
             string[] messageLine = e.Data.MessageArray;            
@@ -111,19 +124,5 @@ namespace Pluggis
                 default:            new ParseForURL(this, messageLine, channel);        break;
             }
         }
-
-        static void Main(string[] args)
-        {
-            Pluggis pluggis = new Pluggis("Roybot", "pluggis", "pluggis-bot", "lindbohm.freenode.net", 6667, "#pluggis");
-            pluggis.Init();
-            pluggis.Connect();
-            pluggis.Login();
-            pluggis.Join("#pluggis");
-            pluggis.Listen();
-            Console.ReadLine();
-            
-        }
-
-
     }
 }

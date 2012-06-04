@@ -1,0 +1,18 @@
+{
+	"nick" 		: "pluggis",
+	"user" 		: "pluggis-bot",
+	"admin"     : "jwr",
+	"connection": 
+	{
+		"server"  : "gibson.freenode.net",
+		"port"	  : "6667",
+		"channels":
+		[
+			"#pluggis"
+		]
+	},
+	"plugins": 
+	[
+
+	]
+}

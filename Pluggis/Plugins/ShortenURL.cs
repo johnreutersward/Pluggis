@@ -22,7 +22,6 @@ namespace Pluggis.Plugins
             Handler();
         }
 
-
         private void Handler()
         {
             if (length > 1)

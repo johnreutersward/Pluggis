@@ -84,6 +84,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="OutputConsole.cs" />
     <Compile Include="ParseForURL.cs" />
     <Compile Include="Pluggis.cs" />
@@ -93,12 +94,16 @@
     <Compile Include="Plugins\ShortenURL.cs" />
     <Compile Include="Plugins\SysInfo.cs" />
     <Compile Include="Plugins\Time.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Plugins\VersionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="Settings.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
