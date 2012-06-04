@@ -28,30 +28,33 @@ namespace Pluggis.Plugins
         {
             if (length > 1)
             {
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://www.googleapis.com/urlshortener/v1/url");
-                httpWebRequest.ContentType = "application/json";
-                httpWebRequest.Method = "POST";
-
-                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-                {
-                    string json = "{\"longUrl\":\"" + messageLine[1] + "\"}";
-                    streamWriter.Write(json);
-                }
-
                 try
                 {
-                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://www.googleapis.com/urlshortener/v1/url");
+                    httpWebRequest.ContentType = "application/json";
+                    httpWebRequest.Method = "POST";
+                    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                     {
-                        var responseText = streamReader.ReadToEnd();
-                        ShortResponse shortResponse = JsonConvert.DeserializeObject<ShortResponse>(responseText);
-                        shortURL = shortResponse.id;
+                        string json = "{\"longUrl\":\"" + messageLine[1] + "\"}";
+                        streamWriter.Write(json);
                     }
-                    pluggis.Message(channel.Name, fromNick + outMsg + shortURL);
+                    try
+                    {
+                        var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                        {
+                            var responseText = streamReader.ReadToEnd();
+                            ShortResponse shortResponse = JsonConvert.DeserializeObject<ShortResponse>(responseText);
+                            shortURL = shortResponse.id;
+                        }
+                        pluggis.Message(channel.Name, fromNick + outMsg + shortURL);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
                 catch (Exception)
                 {
-
                 }
             }
         }
