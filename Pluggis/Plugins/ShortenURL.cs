@@ -14,11 +14,13 @@ namespace Pluggis.Plugins
     {
 
         private string shortURL;
-        private readonly string outMsg = "Short URL: ";
+        private string fromNick;
+        private readonly string outMsg = ": ";
 
-        public ShortenURL(Pluggis pluggis, string[] messageLine, Channel channel)
+        public ShortenURL(Pluggis pluggis, string[] messageLine, Channel channel, String fromNick)
             : base(pluggis, messageLine, channel)
         {
+            this.fromNick = fromNick;
             Handler();
         }
 
@@ -36,16 +38,23 @@ namespace Pluggis.Plugins
                     streamWriter.Write(json);
                 }
 
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                try
                 {
-                    var responseText = streamReader.ReadToEnd();
-                    ShortResponse shortResponse = JsonConvert.DeserializeObject<ShortResponse>(responseText);
-                    shortURL = shortResponse.id;
+                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var responseText = streamReader.ReadToEnd();
+                        ShortResponse shortResponse = JsonConvert.DeserializeObject<ShortResponse>(responseText);
+                        shortURL = shortResponse.id;
+                    }
+                    pluggis.Message(channel.Name, fromNick + outMsg + shortURL);
                 }
-                pluggis.Message(channel.Name, outMsg + shortURL);
+                catch (Exception)
+                {
+
+                }
             }
-}
+        }
 
         public class ShortResponse
         {

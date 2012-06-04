@@ -113,15 +113,16 @@ namespace Pluggis
         private void OnChannelMessage(object sender, IrcEventArgs e)
         {
             Channel channel = irc.GetChannel(e.Data.Channel);
+            string fromNick = e.Data.Nick;
             string[] messageLine = e.Data.MessageArray;            
             switch (e.Data.MessageArray[0])
             {
-                case "+diceroll":   new DiceRoll(this, messageLine, channel);           break;
-                case "+version":    new VersionInfo(this, channel);                     break;
-                case "+time":       new Time(this, channel);                            break;
-                case "+sysinfo":    new SysInfo(this, channel);                         break;
-                case "+shorten":    new ShortenURL(this, messageLine, channel);         break;
-                default:            new ParseForURL(this, messageLine, channel);        break;
+                case "+diceroll":   new DiceRoll(this, messageLine, channel);               break;
+                case "+version":    new VersionInfo(this, channel);                         break;
+                case "+time":       new Time(this, channel);                                break;
+                case "+sysinfo":    new SysInfo(this, channel);                             break;
+                case "+shorten":    new ShortenURL(this, messageLine, channel, fromNick);   break;
+                default:            new ParseForURL(this, messageLine, channel);            break;
             }
         }
     }
