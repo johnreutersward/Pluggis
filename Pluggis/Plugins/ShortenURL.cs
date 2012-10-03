@@ -12,7 +12,7 @@ namespace Pluggis.Plugins
 {
     class ShortenURL : ActionHandler
     {
-
+        private string longURL;
         private string shortURL;
         private string fromNick;
         private readonly string outMsg = ": ";
@@ -20,6 +20,7 @@ namespace Pluggis.Plugins
         public ShortenURL(Pluggis pluggis, string[] messageLine, Channel channel, String fromNick)
             : base(pluggis, messageLine, channel)
         {
+            longURL = messageLine[1];
             this.fromNick = fromNick;
             Handler();
         }
@@ -35,7 +36,7 @@ namespace Pluggis.Plugins
                     httpWebRequest.Method = "POST";
                     using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                     {
-                        string json = "{\"longUrl\":\"" + messageLine[1] + "\"}";
+                        string json = "{\"longUrl\":\"" + longURL + "\"}";
                         streamWriter.Write(json);
                     }
                     try
