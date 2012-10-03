@@ -51,10 +51,12 @@ namespace Pluggis.Plugins
                     }
                     catch (Exception)
                     {
+                        OutputConsole.Print(OutputConsole.LogType.System, "RESPONSE FAILED");
                     }
                 }
                 catch (Exception)
                 {
+                    OutputConsole.Print(OutputConsole.LogType.System, "REQUEST FAILED");
                 }
             }
         }

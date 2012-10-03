@@ -38,10 +38,11 @@ namespace Pluggis
 
             if (url != null && !url.Equals(""))
             {
+                /* Due to changes in http://ragefac.es api, this feature no longer works :(
                 if (url.Contains("ragefac.es/") && url.Length > 18)
                 {
                     new Ragefaces(url, pluggis, channel);
-                }
+                }*/
             }
         }
     }

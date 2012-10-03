@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace Pluggis.Plugins
 {
+    // Due to changes in http://ragefac.es api, this feature no longer works :(
     class Ragefaces : ActionHandler
     {
         private string rageURL;
