@@ -55,6 +55,7 @@ namespace Pluggis
             irc.Encoding = System.Text.Encoding.UTF8;
             irc.SendDelay = 200;
             irc.ActiveChannelSyncing = true;
+            irc.OnChannelNotice += new IrcEventHandler(OnChannelMessage);
             irc.OnError += new ErrorEventHandler(OnError);
             irc.OnRawMessage += new IrcEventHandler(OnRawMessage);
             irc.OnChannelMessage += new IrcEventHandler(OnChannelMessage);
@@ -73,7 +74,7 @@ namespace Pluggis
                 irc.Connect(server, port);
                 isConnected = true;
             }
-            catch (ConnectionException e)
+            catch (ConnectionException)
             {
                 OutputConsole.Print(OutputConsole.LogType.System, "Could not connect to " + server);
             }
@@ -97,7 +98,7 @@ namespace Pluggis
         public void Message(string destination, string message)
         {
             irc.SendMessage(SendType.Message, destination, message);
-            OutputConsole.Print(OutputConsole.LogType.Out, destination + " " + message);
+            OutputConsole.Print(OutputConsole.LogType.Out, "[" + SendType.Message + "]" + destination + " " + message);
         }
 
         private void OnError(object sender, ErrorEventArgs e)
@@ -108,12 +109,14 @@ namespace Pluggis
         private void OnRawMessage(object sender, IrcEventArgs e)
         {
             OutputConsole.Print(OutputConsole.LogType.In, e.Data.RawMessage);
+            
         }
 
         private void OnChannelMessage(object sender, IrcEventArgs e)
         {
             Channel channel = irc.GetChannel(e.Data.Channel);
             string fromNick = e.Data.Nick;
+            
             string[] messageLine = e.Data.MessageArray;            
             switch (e.Data.MessageArray[0])
             {
